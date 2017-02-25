@@ -4,6 +4,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.security.Key;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 import javax.imageio.ImageIO;
 
 /**
@@ -14,6 +17,10 @@ import javax.imageio.ImageIO;
  *
  */
 public abstract class FotoCryptor {
+	private static final String ALGO = "AES";
+	private static final byte[] keyValue = new byte[] { 'T', 'h', 'e', 'B', 'e', 's', 't', 'S', 'e', 'c', 'r', 'e', 't',
+			'K', 'e', 'y' };
+
 	/**
 	 * Hoofdmethode om een bericht aan een foto toe te voegen.
 	 * 
@@ -29,7 +36,7 @@ public abstract class FotoCryptor {
 		int[] pixels = getPixels(picture);
 		int w = picture.getWidth();
 		int h = picture.getHeight();
-		writeData(pixels, getByteArrayFromString(message));
+		writeData(pixels, getByteArrayFromString(message));//encrypt(getByteArrayFromString(message))); (WIP!!!)
 		writeImg(getImageFromArray(pixels, w, h), destination);
 	}
 
@@ -77,9 +84,32 @@ public abstract class FotoCryptor {
 	private static void writeData(int[] pixels, byte[] data) {
 		int pixelCounter = 0;
 		int kleurCounter = 0;
-		for (int i = 0; i < data.length; i++) {
+		byte[] goodData;
+		if (data.length % 3 != 0) {
+			goodData = new byte[data.length + (3 - data.length % 3)];
+			for (int i = 0; i < data.length; i++) {
+				goodData[i] = data[i];
+			}
+			for (int i = data.length; i < data.length + (3 - data.length % 3); i++) {
+				goodData[i] = 32;
+			}
+		} else {
+			goodData = data;
+		}
+		byte[] lengte = toBinary(goodData.length);
+		for (int i = 0; i < 32; i++) {
+			pixels[pixelCounter] = setIntOn(pixels[pixelCounter], kleurCounter, lengte[i]);
+			kleurCounter++;
+			if (kleurCounter == 3) {
+				kleurCounter = 0;
+				pixelCounter++;
+			}
+		}
+		pixelCounter++;
+		kleurCounter = 0;
+		for (int i = 0; i < goodData.length; i++) {
 			for (int bit = 0; bit < 7; bit++) {
-				pixels[pixelCounter] = setIntOn(pixels[pixelCounter], kleurCounter, getBit(data[i], bit));
+				pixels[pixelCounter] = setIntOn(pixels[pixelCounter], kleurCounter, getBit(goodData[i], bit));
 				kleurCounter++;
 				if (kleurCounter == 3) {
 					kleurCounter = 0;
@@ -87,6 +117,15 @@ public abstract class FotoCryptor {
 				}
 			}
 		}
+	}
+
+	private static byte[] toBinary(int getal) {
+		byte[] bits = new byte[32];
+		for (int i = 0; i < 31; i++) {
+			bits[i] = (byte) (getal & 0x1);
+			getal = getal >> 1;
+		}
+		return bits;
 	}
 
 	/**
@@ -177,6 +216,29 @@ public abstract class FotoCryptor {
 		return (pixel & 0xFF);
 	}
 
+	private static int bitsToInt(byte[] arr) {
+		int n = 0;
+		for (byte b : arr)
+			n = (n << 1) | (b == 1 ? 1 : 0);
+		return n;
+	}
+
+	private static void reverse(byte[] array) {
+		if (array == null) {
+			return;
+		}
+		int i = 0;
+		int j = array.length - 1;
+		byte tmp;
+		while (j > i) {
+			tmp = array[j];
+			array[j] = array[i];
+			array[i] = tmp;
+			j--;
+			i++;
+		}
+	}
+
 	/**
 	 * Haalt de geëncrypteerde bytes uit de pixels array.
 	 * 
@@ -184,9 +246,25 @@ public abstract class FotoCryptor {
 	 * @return
 	 */
 	private static byte[] getBytesFromPixels(int[] pixels) {
-		byte[] bits = new byte[pixels.length * 3];
+		byte[] lengteBits = new byte[32];
+		int teller = 0;
+		for (int i = 0; i < 9; i++) {
+			lengteBits[teller] = (byte) getBit(getRed(pixels[i]), 0);
+			teller++;
+			lengteBits[teller] = (byte) getBit(getGreen(pixels[i]), 0);
+			teller++;
+			lengteBits[teller] = (byte) getBit(getBlue(pixels[i]), 0);
+			teller++;
+		}
+		lengteBits[teller] = (byte) getBit(getRed(pixels[10]), 0);
+		teller++;
+		lengteBits[teller] = (byte) getBit(getGreen(pixels[10]), 0);
+		teller++;
+		reverse(lengteBits);
+		int lengte = bitsToInt(lengteBits);
+		byte[] bits = new byte[lengte * 7];
 		int messagecounter = 0;
-		for (int i = 0; i < pixels.length; i++) {
+		for (int i = 11; i < 11 + (lengte * 7 / 3); i++) {
 			bits[messagecounter] = (byte) getBit(getRed(pixels[i]), 0);
 			messagecounter++;
 			bits[messagecounter] = (byte) getBit(getGreen(pixels[i]), 0);
@@ -194,48 +272,15 @@ public abstract class FotoCryptor {
 			bits[messagecounter] = (byte) getBit(getBlue(pixels[i]), 0);
 			messagecounter++;
 		}
-		byte[] bytes = new byte[bits.length / 7];
+		byte[] bytes = new byte[lengte * 7];
 		int bytecounter = 0;
 		for (int i = 0; i < bytes.length - 7; i += 7) {
 			String stuk = "" + bits[i] + bits[i + 1] + bits[i + 2] + bits[i + 3] + bits[i + 4] + bits[i + 5]
 					+ bits[i + 6];
-
 			bytes[bytecounter] = Byte.parseByte(new StringBuilder(stuk).reverse().toString(), 2);
 			bytecounter++;
 		}
-		return bytes;
-	}
-
-	/**
-	 * Leest de eerste en laatste regel tekst uit een foto.
-	 * 
-	 * @param pathToPicture
-	 * @return
-	 */
-	public static String readFirstAndLastLineFromPicture(String pathToPicture) {
-		String[] outputStrings = getCompleteMessageAsStringArrayFromPicture(pathToPicture);
-		return outputStrings[0] + "\n" + outputStrings[outputStrings.length - 1];
-	}
-
-	/**
-	 * Leest alle tekst uit een foto als string array.
-	 * 
-	 * @param pathToPicture
-	 * @return
-	 */
-	private static String[] getCompleteMessageAsStringArrayFromPicture(String pathToPicture) {
-		BufferedImage picture = loadPicture(pathToPicture);
-		int[] pixels = getPixels(picture);
-		byte[] bytes = getBytesFromPixels(pixels);
-		String completeString = getStringFromByteArray(bytes);
-		int total = completeString.length();
-		String[] outputStrings = new String[(int) (Math.floor(total / 100) + 2)];
-		for (int i = 0; i * 100 < total + 100; i += 1) {
-			outputStrings[i] = completeString.substring(i, i + 100);
-			// DEBUG LINE System.out.println(i + "---" + total / 100 + "---" +
-			// total);
-		}
-		return outputStrings;
+		return bytes;//decrypt(bytes); (WIP!!!)
 	}
 
 	/**
@@ -244,13 +289,8 @@ public abstract class FotoCryptor {
 	 * @param pathToPicture
 	 * @return
 	 */
-	public static String readCompleteMessageFromPicture(String pathToPicture) {
-		String[] outputStrings = getCompleteMessageAsStringArrayFromPicture(pathToPicture);
-		String completeOutput = "";
-		for (int i = 0; i < outputStrings.length; i++) {
-			completeOutput += outputStrings[i] + "\n";
-		}
-		return completeOutput;
+	public static String readMessageFromPicture(String pathToPicture) {
+		return getStringFromByteArray(getBytesFromPixels(getPixels(loadPicture(pathToPicture))));
 	}
 
 	/**
@@ -263,6 +303,35 @@ public abstract class FotoCryptor {
 		try {
 			return s.getBytes("UTF-8");
 		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	private static Key generateKey() throws Exception {
+		Key key = new SecretKeySpec(keyValue, ALGO);
+		return key;
+	}
+
+	public static byte[] encrypt(byte[] data) {
+		try {
+			Key key = generateKey();
+			Cipher c = Cipher.getInstance(ALGO);
+			c.init(Cipher.ENCRYPT_MODE, key);
+			return c.doFinal(data);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static byte[] decrypt(byte[] data) {
+		try {
+			Key key = generateKey();
+			Cipher c = Cipher.getInstance(ALGO);
+			c.init(Cipher.DECRYPT_MODE, key);
+			return c.doFinal(data);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
