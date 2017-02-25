@@ -6,39 +6,59 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import javax.imageio.ImageIO;
 
-public class FotoCryptor {
-	private int[] pixels;
-
-	public static void main(String[] args) {
-		FotoCryptor cryptor = new FotoCryptor();
-		cryptor.addMessageToPicture("./res/pic.png", "#abcdefghijklmnopqrstuvwxyz#");
-		//System.out.println(cryptor.readCompleteMessageFromPicture("./res/pic1.png"));
-		System.out.println(cryptor.readFirstAndLastLineFromPicture("./res/pic1.png"));
-	}
-
-	private void addMessageToPicture(String pathToPicture, String message) {
+/**
+ * Deze klasse encrypteert text in PNG afbeeldingen en kan ook tekst uit
+ * afbeeldingen lezen.
+ * 
+ * @author Bram Swinnen
+ *
+ */
+public abstract class FotoCryptor {
+	/**
+	 * Hoofdmethode om een bericht aan een foto toe te voegen.
+	 * 
+	 * @param pathToPicture
+	 *            path naar de foto
+	 * @param message
+	 *            bericht om in de foto te encrypteren
+	 * @param destination
+	 *            de locatie en de naam van de output foto
+	 */
+	public static void addMessageToPicture(String pathToPicture, String message, String destination) {
 		BufferedImage picture = loadPicture(pathToPicture);
 		int[] pixels = getPixels(picture);
 		int w = picture.getWidth();
 		int h = picture.getHeight();
 		writeData(pixels, getByteArrayFromString(message));
-		this.pixels = pixels;
-		writeImg(getImageFromArray(this.pixels, w, h), "pic1");
+		writeImg(getImageFromArray(pixels, w, h), destination);
 	}
 
-	private BufferedImage loadPicture(String pathToPicture) {
-		BufferedImage picture = null;
+	/**
+	 * Methode om een BufferedImage in te lezen.
+	 * 
+	 * @param pathToPicture
+	 *            path naar de foto
+	 * @return het BufferedImage object
+	 */
+	private static BufferedImage loadPicture(String pathToPicture) {
 		if (pathToPicture.endsWith(".png")) {
 			try {
-				picture = ImageIO.read(new File(pathToPicture));
+				return ImageIO.read(new File(pathToPicture));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-		return picture;
+		return null;
 	}
 
-	private int[] getPixels(BufferedImage pic) {
+	/**
+	 * Haalt de pixels array uit een BufferedImage.
+	 * 
+	 * @param pic
+	 *            het BufferedImage object
+	 * @return een int array met daarin de pixels
+	 */
+	private static int[] getPixels(BufferedImage pic) {
 		int width = pic.getWidth();
 		int height = pic.getHeight();
 		int[] pixels = new int[width * height];
@@ -46,7 +66,15 @@ public class FotoCryptor {
 		return pixels;
 	}
 
-	private void writeData(int[] pixels, byte[] data) {
+	/**
+	 * Schrijft het bericht in de pixels array.
+	 * 
+	 * @param pixels
+	 *            de pixels array
+	 * @param data
+	 *            de tekst als een byte array
+	 */
+	private static void writeData(int[] pixels, byte[] data) {
 		int pixelCounter = 0;
 		int kleurCounter = 0;
 		for (int i = 0; i < data.length; i++) {
@@ -61,16 +89,28 @@ public class FotoCryptor {
 		}
 	}
 
-	private int setIntOn(int pixel, int kleur, int waarde) {
+	/**
+	 * Zet de laatste bit van de R, G of B van een pixel op 1 of 0
+	 * 
+	 * @param pixel
+	 *            de waarde van de meegegeven pixel
+	 * @param kleur
+	 *            de kleur die je wilt veranderen (0 = rood, 1 = groen, 2 =
+	 *            blauw)
+	 * @param waarde
+	 *            de waarde die je wilt setten (1 of 0)
+	 * @return
+	 */
+	private static int setIntOn(int pixel, int kleur, int waarde) {
 		int red = getRed(pixel);
 		int green = getGreen(pixel);
 		int blue = getBlue(pixel);
 		if (kleur == 0) {
-			red = setIntTo(red, waarde);
+			red = setLastBitTo(red, waarde);
 		} else if (kleur == 1) {
-			green = setIntTo(green, waarde);
+			green = setLastBitTo(green, waarde);
 		} else if (kleur == 2) {
-			blue = setIntTo(blue, waarde);
+			blue = setLastBitTo(blue, waarde);
 		}
 
 		int newPixel = red;
@@ -79,7 +119,16 @@ public class FotoCryptor {
 		return newPixel;
 	}
 
-	private int setIntTo(int original, int value) {
+	/**
+	 * Zet de laatse bit van 'original' op 1 of 0
+	 * 
+	 * @param original
+	 *            de int die je wilt veranderen
+	 * @param value
+	 *            de waarde (0 of 1)
+	 * @return
+	 */
+	private static int setLastBitTo(int original, int value) {
 		if (value == 1) {
 			return (original | (1 << 0));
 		} else {
@@ -87,23 +136,54 @@ public class FotoCryptor {
 		}
 	}
 
-	private int getBit(int nummer, int pos) {
-		return ((nummer >> pos) & 1);
+	/**
+	 * Returnt de nde bit van 'nummer'.
+	 * 
+	 * @param nummer
+	 * @param n
+	 * @return
+	 */
+	private static int getBit(int nummer, int n) {
+		return ((nummer >> n) & 1);
 	}
 
-	private int getRed(int pixel) {
+	/**
+	 * Returnt het rode gedeelte van de RGB van 'pixel'.
+	 * 
+	 * @param pixel
+	 * @return
+	 */
+	private static int getRed(int pixel) {
 		return ((pixel >> 16) & 0xFF);
 	}
 
-	private int getGreen(int pixel) {
+	/**
+	 * Returnt het groene gedeelte van de RGB van 'pixel'.
+	 * 
+	 * @param pixel
+	 * @return
+	 */
+	private static int getGreen(int pixel) {
 		return ((pixel >> 8) & 0xFF);
 	}
 
-	private int getBlue(int pixel) {
+	/**
+	 * Returnt het blauwe gedeelte van de RGB van 'pixel'.
+	 * 
+	 * @param pixel
+	 * @return
+	 */
+	private static int getBlue(int pixel) {
 		return (pixel & 0xFF);
 	}
 
-	private byte[] getBytesFromPixels(int[] pixels) {
+	/**
+	 * Haalt de geëncrypteerde bytes uit de pixels array.
+	 * 
+	 * @param pixels
+	 * @return
+	 */
+	private static byte[] getBytesFromPixels(int[] pixels) {
 		byte[] bits = new byte[pixels.length * 3];
 		int messagecounter = 0;
 		for (int i = 0; i < pixels.length; i++) {
@@ -126,12 +206,24 @@ public class FotoCryptor {
 		return bytes;
 	}
 
-	private String readFirstAndLastLineFromPicture(String pathToPicture) {
+	/**
+	 * Leest de eerste en laatste regel tekst uit een foto.
+	 * 
+	 * @param pathToPicture
+	 * @return
+	 */
+	public static String readFirstAndLastLineFromPicture(String pathToPicture) {
 		String[] outputStrings = getCompleteMessageAsStringArrayFromPicture(pathToPicture);
 		return outputStrings[0] + "\n" + outputStrings[outputStrings.length - 1];
 	}
 
-	private String[] getCompleteMessageAsStringArrayFromPicture(String pathToPicture) {
+	/**
+	 * Leest alle tekst uit een foto als string array.
+	 * 
+	 * @param pathToPicture
+	 * @return
+	 */
+	private static String[] getCompleteMessageAsStringArrayFromPicture(String pathToPicture) {
 		BufferedImage picture = loadPicture(pathToPicture);
 		int[] pixels = getPixels(picture);
 		byte[] bytes = getBytesFromPixels(pixels);
@@ -140,21 +232,34 @@ public class FotoCryptor {
 		String[] outputStrings = new String[(int) (Math.floor(total / 100) + 2)];
 		for (int i = 0; i * 100 < total + 100; i += 1) {
 			outputStrings[i] = completeString.substring(i, i + 100);
-			//DEBUG LINE System.out.println(i + "---" + total / 100 + "---" + total);
+			// DEBUG LINE System.out.println(i + "---" + total / 100 + "---" +
+			// total);
 		}
 		return outputStrings;
 	}
 
-	private String readCompleteMessageFromPicture(String pathToPicture) {
+	/**
+	 * Leest alle tekst uit een foto.
+	 * 
+	 * @param pathToPicture
+	 * @return
+	 */
+	public static String readCompleteMessageFromPicture(String pathToPicture) {
 		String[] outputStrings = getCompleteMessageAsStringArrayFromPicture(pathToPicture);
-		String completeOutput="";
-		for(int i=0;i<outputStrings.length;i++){
-			completeOutput+=outputStrings[i]+"\n";
+		String completeOutput = "";
+		for (int i = 0; i < outputStrings.length; i++) {
+			completeOutput += outputStrings[i] + "\n";
 		}
 		return completeOutput;
 	}
 
-	private byte[] getByteArrayFromString(String s) {
+	/**
+	 * Converteert een string array naar een byte array.
+	 * 
+	 * @param s
+	 * @return
+	 */
+	private static byte[] getByteArrayFromString(String s) {
 		try {
 			return s.getBytes("UTF-8");
 		} catch (UnsupportedEncodingException e) {
@@ -163,7 +268,13 @@ public class FotoCryptor {
 		return null;
 	}
 
-	private String getStringFromByteArray(byte[] array) {
+	/**
+	 * Converteert een byte array naar een string.
+	 * 
+	 * @param array
+	 * @return
+	 */
+	private static String getStringFromByteArray(byte[] array) {
 		try {
 			return new String(array, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
@@ -172,7 +283,15 @@ public class FotoCryptor {
 		return null;
 	}
 
-	private BufferedImage getImageFromArray(int[] pixels, int width, int height) {
+	/**
+	 * Zet een array pixels om tot een BufferedImage.
+	 * 
+	 * @param pixels
+	 * @param width
+	 * @param height
+	 * @return
+	 */
+	private static BufferedImage getImageFromArray(int[] pixels, int width, int height) {
 		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
@@ -182,9 +301,15 @@ public class FotoCryptor {
 		return image;
 	}
 
-	private void writeImg(BufferedImage image, String name) {
+	/**
+	 * Schrijft de BufferedImage naar de destination path
+	 * 
+	 * @param image
+	 * @param name
+	 */
+	private static void writeImg(BufferedImage image, String destination) {
 		try {
-			ImageIO.write(image, "png", new File("./res/" + name + ".png"));
+			ImageIO.write(image, "png", new File(destination + ".png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
