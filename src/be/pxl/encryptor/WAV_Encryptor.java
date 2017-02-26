@@ -1,4 +1,5 @@
 package be.pxl.encryptor;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -10,26 +11,24 @@ import java.nio.file.Paths;
 import javax.sound.sampled.*;
 
 public final class WAV_Encryptor {
-
-	private static final String INPUT_PATH = "./res/Scatman.wav";
-	private static final String OUTPUT_PATH = "./res/Hidden.wav";
-	private static final String MESSAGE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	private static final int START_INDEX = 3700000;
 
-	private static final int END_INDEX = START_INDEX + MESSAGE.length();
+	private static int END_INDEX;
 
-	public static void main(String[] args) {
-		byte[] data = convertWAVFileToByteArray(INPUT_PATH);
-		printByteValues(data, "INPUT");
+	public static void encryptWAV(String input_path, String message, String output_path) {
+		byte[] data = convertWAVFileToByteArray(input_path);
+		calcEnd_index(message);
+		setHiddenMessageOnStartIndexTo(data, message);
+		createWAVFile(data, output_path);
 
-		setHiddenMessageOnStartIndexTo(data, MESSAGE);
-		printByteValues(data, "AFTER-CHANGE");
-		createWAVFile(data);
+	}
 
-		printMessageFromOutputWAVFile(OUTPUT_PATH);
-		printByteValuesAsString(data);
+	private static void calcEnd_index(String message) {
+		END_INDEX = START_INDEX + message.length();
+	}
 
-		System.out.println("\nSize = " + data.length + "\n");
+	public static void printMessage(String path) {
+		printByteValuesAsString(convertWAVFileToByteArray(path));
 	}
 
 	private static void setHiddenMessageOnStartIndexTo(byte[] data, String message) {
@@ -45,8 +44,8 @@ public final class WAV_Encryptor {
 		printByteValues(outputData, "OUTPUT-BYTES");
 	}
 
-	private static void createWAVFile(byte[] data) {
-		File newFile = new File(OUTPUT_PATH);
+	private static void createWAVFile(byte[] data, String path) {
+		File newFile = new File(path);
 		InputStream byteArray = new ByteArrayInputStream(data);
 
 		AudioInputStream ais = null;
@@ -80,7 +79,6 @@ public final class WAV_Encryptor {
 	}
 
 	private static void printByteValuesAsString(byte[] data) {
-		System.out.println("OUTPUT-STRING");
 		System.out.println(new String(data, START_INDEX, END_INDEX - START_INDEX));
 	}
 
