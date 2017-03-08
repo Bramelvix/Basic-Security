@@ -4,11 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import javax.crypto.Cipher;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
 import javax.imageio.ImageIO;
-import javax.xml.bind.DatatypeConverter;
 
 /**
  * Deze klasse encrypteert text in PNG afbeeldingen en kan ook tekst uit
@@ -18,7 +14,7 @@ import javax.xml.bind.DatatypeConverter;
  *
  */
 public abstract class PNG_Encryptor {
-	private static final String IV = "RandomInitVector";
+
 
 	/**
 	 * Hoofdmethode om een bericht aan een foto toe te voegen.
@@ -30,12 +26,12 @@ public abstract class PNG_Encryptor {
 	 * @param destination
 	 *            de locatie en de naam van de output foto
 	 */
-	public static void addMessageToPicture(String pathToPicture, String message, String destination, String key) {
+	public static void addMessageToPicture(String pathToPicture, String message, String destination, String key,String IV) {
 		BufferedImage picture = loadPicture(pathToPicture);
 		int[] pixels = getPixels(picture);
 		int w = picture.getWidth();
 		int h = picture.getHeight();
-		writeData(pixels, getByteArrayFromString(encrypt(message, key)));
+		writeData(pixels, getByteArrayFromString(StringEncryptor.encrypt(message, key,IV)));
 		// (WIP!!!)
 		writeImg(getImageFromArray(pixels, w, h), destination);
 	}
@@ -277,8 +273,8 @@ public abstract class PNG_Encryptor {
 	 * @param pathToPicture
 	 * @return
 	 */
-	public static String readMessageFromPicture(String pathToPicture, String key) {
-		return decrypt(getStringFromByteArray((getBytesFromPixels(getPixels(loadPicture(pathToPicture))))), key);
+	public static String readMessageFromPicture(String pathToPicture, String key,String IV) {
+		return StringEncryptor.decrypt(getStringFromByteArray((getBytesFromPixels(getPixels(loadPicture(pathToPicture))))), key,IV);
 	}
 
 	/**
@@ -309,36 +305,6 @@ public abstract class PNG_Encryptor {
 		return null;
 	}
 
-	public static String decrypt(String encrypted, String key) {
-		try {
-			IvParameterSpec iv = new IvParameterSpec(IV.getBytes("UTF-8"));
-			SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes("UTF-8"), "AES");
-			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
-			cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv);
-			byte[] original = cipher.doFinal(DatatypeConverter.parseBase64Binary(encrypted));
-
-			return new String(original);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-
-		return null;
-	}
-
-	public static String encrypt(String value, String key) {
-		try {
-			IvParameterSpec iv = new IvParameterSpec(IV.getBytes("UTF-8"));
-			SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes("UTF-8"), "AES");
-			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
-			cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
-			byte[] encrypted = cipher.doFinal(value.getBytes());
-			return DatatypeConverter.printBase64Binary(encrypted);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-
-		return null;
-	}
 
 	/**
 	 * Converteert een byte array naar een string.
