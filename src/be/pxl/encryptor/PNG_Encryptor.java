@@ -13,8 +13,7 @@ import javax.imageio.ImageIO;
  * @author Bram Swinnen
  *
  */
-public abstract class PNG_Encryptor {
-
+public class PNG_Encryptor {
 
 	/**
 	 * Hoofdmethode om een bericht aan een foto toe te voegen.
@@ -26,13 +25,13 @@ public abstract class PNG_Encryptor {
 	 * @param destination
 	 *            de locatie en de naam van de output foto
 	 */
-	public static void addMessageToPicture(String pathToPicture, String message, String destination, String key,String IV) {
+	public static void addMessageToPicture(String pathToPicture, String message, String destination, String key) {
 		BufferedImage picture = loadPicture(pathToPicture);
 		int[] pixels = getPixels(picture);
 		int w = picture.getWidth();
 		int h = picture.getHeight();
-		writeData(pixels, getByteArrayFromString(StringEncryptor.encrypt(message, key,IV)));
-		// (WIP!!!)
+		writeData(pixels,
+				getByteArrayFromString(StringEncryptor.encrypt(message, key.substring(0, 16), key.substring(16, 32))));
 		writeImg(getImageFromArray(pixels, w, h), destination);
 	}
 
@@ -273,8 +272,10 @@ public abstract class PNG_Encryptor {
 	 * @param pathToPicture
 	 * @return
 	 */
-	public static String readMessageFromPicture(String pathToPicture, String key,String IV) {
-		return StringEncryptor.decrypt(getStringFromByteArray((getBytesFromPixels(getPixels(loadPicture(pathToPicture))))), key,IV);
+	public static String readMessageFromPicture(String pathToPicture, String key) {
+		return StringEncryptor.decrypt(
+				getStringFromByteArray((getBytesFromPixels(getPixels(loadPicture(pathToPicture))))),
+				key.substring(0, 16), key.substring(16, 32));
 	}
 
 	/**
@@ -304,7 +305,6 @@ public abstract class PNG_Encryptor {
 		}
 		return null;
 	}
-
 
 	/**
 	 * Converteert een byte array naar een string.
@@ -351,6 +351,9 @@ public abstract class PNG_Encryptor {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	private PNG_Encryptor(){
+	//afblijven	
 	}
 
 }
