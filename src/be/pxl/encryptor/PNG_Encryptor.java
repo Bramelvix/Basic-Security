@@ -13,7 +13,7 @@ import javax.imageio.ImageIO;
  * @author Bram Swinnen
  *
  */
-public class PNG_Encryptor {
+public final class PNG_Encryptor {
 
 	/**
 	 * Hoofdmethode om een bericht aan een foto toe te voegen.
