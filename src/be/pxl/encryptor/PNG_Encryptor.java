@@ -263,7 +263,7 @@ public final class PNG_Encryptor {
 			bytes[bytecounter] = Byte.parseByte(new StringBuilder(stuk).reverse().toString(), 2);
 			bytecounter++;
 		}
-		return bytes;// (WIP!!!)
+		return bytes;
 	}
 
 	/**
