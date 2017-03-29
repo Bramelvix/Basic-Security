@@ -25,12 +25,13 @@ public final class PNG_Encryptor {
 	 * @param destination
 	 *            de locatie en de naam van de output foto
 	 */
-	public static void addMessageToPicture(String pathToPicture, String message, String destination) {
+	public static void addMessageToPicture(String pathToPicture, String message, String destination, String keyLocation,
+			String pukey, String prkey) {
 		BufferedImage picture = loadPicture(pathToPicture);
 		int[] pixels = getPixels(picture);
 		int w = picture.getWidth();
 		int h = picture.getHeight();
-		writeData(pixels, getByteArrayFromString(AesStringEncryptor.encrypt(message)));
+		writeData(pixels, getByteArrayFromString(AesStringEncryptor.encrypt(message, keyLocation, prkey, pukey)));
 		writeImg(getImageFromArray(pixels, w, h), destination);
 	}
 
@@ -271,9 +272,9 @@ public final class PNG_Encryptor {
 	 * @param pathToPicture
 	 * @return
 	 */
-	public static String readMessageFromPicture(String pathToPicture, String pathToKey) {
+	public static String readMessageFromPicture(String pathToPicture, String pathToKey, String prkey) {
 		return AesStringEncryptor.decrypt(
-				getStringFromByteArray((getBytesFromPixels(getPixels(loadPicture(pathToPicture))))), pathToKey);
+				getStringFromByteArray((getBytesFromPixels(getPixels(loadPicture(pathToPicture))))), pathToKey, prkey);
 	}
 
 	/**

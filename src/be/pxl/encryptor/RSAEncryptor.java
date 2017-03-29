@@ -51,14 +51,11 @@ public abstract class RSAEncryptor {
 	}
 
 	private static boolean areKeysPresent(String prkey, String pukey) {
+		return (isKeyPresent(prkey) && isKeyPresent(pukey));
+	}
 
-		File privateKey = new File(prkey);
-		File publicKey = new File(pukey);
-
-		if (privateKey.exists() && publicKey.exists()) {
-			return true;
-		}
-		return false;
+	private static boolean isKeyPresent(String key) {
+		return new File(key).exists();
 	}
 
 	private static byte[] encrypt(String text, PublicKey key) {
@@ -92,31 +89,31 @@ public abstract class RSAEncryptor {
 		return new String(dectyptedText);
 	}
 
-	public static String encrypt(String prKeyPath, String puKeyPath, String message) {
+	public static byte[] encrypt(String prKeyPath, String puKeyPath, String message) {
 		try {
 			if (!areKeysPresent(prKeyPath, puKeyPath)) {
 				generateKey(prKeyPath, puKeyPath);
 			}
-			ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(prKeyPath));
-			inputStream.close();
+			ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(puKeyPath));
 			final PublicKey publicKey = (PublicKey) inputStream.readObject();
+			inputStream.close();
 			final byte[] cipherText = encrypt(message, publicKey);
-			return new String(cipherText);
+			return cipherText;
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 
-	public static String decrypt(String prKeyPath, String puKeyPath, String encrypted) {
+	public static String decrypt(String prKeyPath, byte[] encrypted) {
 		try {
-			if (!areKeysPresent(prKeyPath, puKeyPath)) {
+			if (!isKeyPresent(prKeyPath)) {
 				return null;
 			}
-			ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(puKeyPath));
+			ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(prKeyPath));
 			final PrivateKey privateKey = (PrivateKey) inputStream.readObject();
 			inputStream.close();
-			return decrypt(encrypted.getBytes(), privateKey);
+			return decrypt(encrypted, privateKey);
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
