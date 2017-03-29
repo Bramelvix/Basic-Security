@@ -5,7 +5,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 
-public class StringEncryptor {
+public class AesStringEncryptor {
 	public static String decrypt(String encrypted, String key, String IV) {
 		try {
 			IvParameterSpec iv = new IvParameterSpec(IV.getBytes("UTF-8"));
