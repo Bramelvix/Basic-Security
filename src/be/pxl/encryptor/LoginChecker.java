@@ -11,7 +11,7 @@ public class LoginChecker {
 		private static Connection connection;
 
 		public static Connection getConnection() throws SQLException {
-			if (connection == null)
+			if (connection == null || connection.isClosed())
 				connection = DriverManager.getConnection("jdbc:mysql://213.136.26.180:3306/bramlvx_basicSecurity",
 						"bramlvx_user", "userpass");
 			return connection;
@@ -26,14 +26,34 @@ public class LoginChecker {
 
 			if (resultSet.next()) {
 				String salt = resultSet.getString(1);
-				String hash = MD5.getHash(pass+salt);
-				System.out.println(hash);
+				String hash = MD5.getHash(pass + salt);
+				ResultSet loginresult = statement
+						.executeQuery("SELECT Password FROM Users WHERE Username ='" + username + "';");
+				if (loginresult.next()) {
+					String wachtwoord = loginresult.getString(1);
+					loginresult.close();
+					return wachtwoord.equals(hash);
+				}
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return false;
+
+	}
+
+	public static void createUser(String username, String pass) {
+		try {
+			Connection connection = ConnectionFactory.getConnection();
+			Statement statement = connection.createStatement();
+			String salt = RandomStringGenerator.getString(30);
+			String hash = MD5.getHash(pass + salt);
+			statement.executeUpdate("INSERT INTO Users(Username,Password,Salt) VALUES('" + username + "','" + hash
+					+ "','" + salt + "');");
+			statement.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
 	}
 

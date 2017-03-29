@@ -10,6 +10,8 @@ public class Test {
 		//WAV_Encryptor.encryptWAV("./res/scatman.wav", "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "./res/hidden.wav");
 		//WAV_Encryptor.printMessage("./res/hidden.wav");
 		System.out.println(LoginChecker.isLoginValid("branco", "wachtwoord"));
+		System.out.println(LoginChecker.isLoginValid("hanne", "wachtwoord"));
+		System.out.println(LoginChecker.isLoginValid("bram", "wachtwoord"));
 
 	}
 
