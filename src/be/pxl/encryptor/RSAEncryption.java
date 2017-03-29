@@ -1,3 +1,5 @@
+package be.pxl.encryptor;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.security.KeyPair;
