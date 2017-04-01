@@ -1,0 +1,100 @@
+input {
+    border-radius: 8px;
+}
+
+#body {
+    /*background-color: #253651;*/
+}
+
+.formulier {
+    background-color: #2aabd2;
+}
+
+.main-div {
+    background-color: #2b542c;
+    margin-right: 0px;
+    margin-left: 0px;
+    height: 700px;
+}
+
+#vertical-menubar {
+    height: 100%;
+    background-color: #8a6d3b;
+}
+
+#vertical-navbar {
+    height: 100%;
+    background-color: #9acfea;
+}
+
+#message-div {
+    height: 100%;
+    background-color: #843534;
+}
+
+.vertical-center {
+
+}
+
+.submit {
+    background-color: #ebca01;
+    border-color: #ebca01;
+    margin: 2% 3%;
+    height: 30px;
+    width: 94%;
+}
+
+.input {
+    background-color: #3e5057;
+    border-color: #3e5057;
+    margin: 2% 3%;
+    height: 30px;
+    width: 94%;
+    color: black;
+}
+
+#vertical-menubar {
+    background-color: wheat;
+}
+
+::-webkit-input-placeholder { /* Chrome */
+    color: Black;
+}
+
+:-ms-input-placeholder { /* IE 10+ */
+    color: Black;
+}
+
+::-moz-placeholder { /* Firefox 19+ */
+    color: Black;
+    opacity: 1;
+}
+
+:-moz-placeholder { /* Firefox 4 - 18 */
+    color: Black;
+    opacity: 1;
+}
+
+.h-line-in-div {
+    width: 40%;
+    float: left;
+    height: 30px;
+}
+
+.h-line hr {
+    border-top: 9px solid black;
+}
+
+
+
+.h-text-between-two-lines-div {
+    width: 20%;
+    float: left;
+}
+
+.centered-text h2 {
+    text-align: center;
+    vertical-align: middle;
+    margin: 0;
+    height: 30px;
+}
