@@ -1,0 +1,132 @@
+/* GLOBAL
+===========================
+*/
+@import url('https://fonts.googleapis.com/css?family=Poiret+One|Roboto');
+
+.dark-blue {
+    background-color: #2a363b;
+}
+
+.middle-blue {
+    background-color: #3e5057;
+}
+
+.lighter-blue {
+    background-color: #607b87;
+}
+
+.light-gray {
+    background-color: #e4e4e4;
+}
+
+.yellow {
+    background-color: #ebca01;
+}
+
+html, body{
+    margin:0;
+    padding:0;
+    height:100%;
+}
+html{
+    font-size:10px;
+    line-height:1.42;
+}
+
+body{
+    font-size: 1.8rem;
+    font-family: 'Poiret One', sans-serif;
+}
+
+.button {
+    border: none;
+    width: 100%;
+    border-radius: 8px;
+    display: block;
+    margin: 5% 0;
+    padding: 2%;
+}
+
+.button:hover,
+.button:focus,
+.button:active{
+    /*padding: 2.5%;*/
+    font-size: 2rem;
+    color: white;
+    transition:all 420ms ease-in-out 0s;
+}
+
+a,
+a:active,
+a:hover,
+a:focus,
+a:visited{
+    text-decoration: none;
+}
+/* LOGIN / REGISTREER
+===========================
+*/
+
+.full-background {
+    background-color: #2a363b;
+    background-image: url("../images/BackgroundHome.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.container{
+    display: table;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding:0;
+}
+
+#content-center{
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center
+}
+
+#login-form {
+    text-align: center;
+    padding: 0 5rem;
+    font-family:'Roboto', sans-serif;
+}
+
+#login-form img {
+    margin: 0%;
+    display: block;
+}
+
+.input-field {
+    border-radius: 8px;
+    display: block;
+    width: 100%;
+    border: none;
+    margin: 5% 0;
+    padding: 2%;
+    color: white;
+    text-align: center;
+}
+
+.input-field::-webkit-input-placeholder { /* Chrome */
+    color: #2a363b;
+}
+
+.input-field:-ms-input-placeholder { /* IE 10+ */
+    color: #2a363b;
+}
+
+.input-field::-moz-placeholder { /* Firefox 19+ */
+    color: #2a363b;
+    opacity: 1;
+}
+
+.input-field:-moz-placeholder { /* Firefox 4 - 18 */
+    color: #2a363b;
+    opacity: 1;
+}
+

@@ -1,0 +1,143 @@
+/* SIDEBAR
+===========================
+*/
+
+body {
+    overflow-x: hidden;
+}
+
+/* Toggle Styles */
+
+#wrapper {
+    padding-left: 0;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+#wrapper.toggled {
+    padding-left: 120px;
+}
+
+#sidebar-wrapper {
+    z-index: 1000;
+    position: fixed;
+    left: 120px;
+    width: 0;
+    height: 100%;
+    margin-left: -90px;
+    overflow-y: auto;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+    width: 90px;
+}
+
+#page-content-wrapper {
+    padding: 100px 20px 20px 20px;
+    position: relative;
+    color: white;
+}
+
+#wrapper.toggled #page-content-wrapper {
+    position: relative;
+    margin-right: 0;
+}
+
+/* header */
+
+header{
+    position: fixed;
+    top: 20px;
+    left: 50px;
+    z-index: 2000;
+}
+
+header #logo{
+    width: 280px;
+}
+
+#menu-toggle span{
+    display: block;
+    width: 35px;
+    height: 5px;
+    background-color: white;
+    margin: 6px 0;
+}
+
+/* Sidebar Styles */
+
+.sidebar-nav {
+    position: absolute;
+    top: 120px;
+    width: 90px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sidebar-nav li {
+    text-indent: 20px;
+    line-height: 40px;
+}
+
+.sidebar-nav li a {
+    display: block;
+    text-decoration: none;
+    color: white;
+}
+
+.sidebar-nav li a:hover,
+.sidebar-nav li a:active,
+.sidebar-nav li a:focus,
+.active{
+    text-decoration: none;
+    background:  #3e5057;
+    border-left: #ebca01 solid 0.5rem;
+}
+
+.sidebar-nav li a img{
+    width: 70%;
+    padding: 5%;
+}
+
+
+/* INHOUD PAGINA
+===========================
+*/
+
+
+/* MOBILE
+===========================
+*/
+
+@media(max-width:768px) {
+    #page-content-wrapper {
+        width: 100%;
+        position: absolute;
+        padding: 15px;
+        text-align: center;
+    }
+
+    #wrapper.toggled #page-content-wrapper {
+        position: absolute;
+        margin-right: -90px;
+    }
+
+    header{
+        width: 100%;
+        background-color: #2a363b;
+        left: 0;
+        top: 0;
+        padding: 20px;
+    }
+
+    #sidebar-wrapper{
+        left: 90px;
+    }
+}

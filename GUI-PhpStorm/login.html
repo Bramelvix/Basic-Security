@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crypto</title>
-    <link rel="stylesheet" type="text/css" href="globalStyle.css">
+
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -11,29 +12,26 @@
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
           integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Own stylesheet -->
+    <link rel="stylesheet" type="text/css" href="styles/styles.css">
+
 </head>
-<body id="body">
-<div>
-    <form class="formulier vertical-center col-sm-offset-4 col-sm-4">
-        <div class="row">
-            <img src="images/LogoGeel.svg" alt="Crypto">
-        </div>
-        <div class="row">
-            <input class="input" type="text" name="username" placeholder=" Username:">
-        </div>
-
-        <div class="row">
-            <input class="input" type="password" name="password" placeholder=" Password:">
-        </div>
-
-        <div class="row">
-            <input class="submit" type="submit" value=" Login">
-        </div>
-    </form>
+<body class="full-background">
+<div class="container">
+    <section id="content-center">
+        <form class="col-md-offset-4 col-md-4 col-xs-12" id="login-form">
+            <img src="images/LogoWit.svg" alt="Crypto Logo">
+            <input class="middle-blue input-field" type="text" name="username" placeholder="Username:">
+            <input class="middle-blue input-field" type="password" name="password" placeholder="Password:">
+            <input class="button yellow" type="submit" value="Login">
+        </form>
+    </section>
 </div>
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
         integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
         crossorigin="anonymous"></script>
+
 </body>
 </html>

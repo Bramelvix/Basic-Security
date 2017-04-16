@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+          integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+            integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
+            integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"
+            integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
+            crossorigin="anonymous"></script>
+    <!-- Own style -->
+    <link rel="stylesheet" type="text/css" href="styles/styles.css">
+    <link rel="stylesheet" type="text/css" href="styles/messageOverview.css">
+</head>
+
+<body class="middle-blue">
+<header>
+    <a href="#menu-toggle" class="btn btn-default hidden-md-up" id="menu-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+    </a>
+    <img id="logo" src="images/LogoWit.svg" alt="Crypto logo"/>
+</header>
+
+<div id="wrapper" class="toggled">
+    <!-- Sidebar -->
+    <div id="sidebar-wrapper" class="dark-blue ">
+        <ul class="sidebar-nav" id="sidebar1">
+            <li>
+                <a href="message.html"><img src="images/NewMessage.svg" alt="New Message" title="New message"/></a>
+            </li>
+            <li>
+                <a href="#" class="active"><img src="images/Messages.svg" alt="All Messages" title="Messages"/></a>
+            </li>
+        </ul>
+
+        <ul class="sidebar-nav" id="sidebar2">
+            <li><a href="#">Hanne Colaers</a></li>
+            <li><a href="#">Jelle Vounckx</a></li>
+            <li><a href="#">Bram Swinnen</a></li>
+            <li><a href="#" class="active">Branco Dortangs</a></li>
+            <li><a href="#">Hakan Pinar</a></li>
+        </ul>
+    </div>
+    <!-- /#sidebar-wrapper -->
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12" id="content-header">
+                    <h1>Branco Dortangs</h1>
+                    <div class="date">
+                        <div class="line"></div>
+                        <h3>woe 22/03</h3>
+                        <div class="line"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6 message-block">
+                    <div class="user-icon hidden-sm-down"><i class="fa fa-user-circle"></i></div>
+                    <div class="light-gray message">
+                        <div class="message-content">
+                            <img src="images/ExampleImage.png" alt="image"/>
+                        </div>
+                        <button class="button middle-blue text-uppercase" type="submit">Decrypt message</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6 message-block">
+                    <div class="user-icon hidden-sm-down"><i class="fa fa-user-circle"></i></div>
+                    <div class="light-gray message">
+                        <div class="message-content">
+                            <p>
+                                hQEOA1e+1x6YuUMCEAP8Dei6beIRV4x6pYho4TiFs8JBzulgha+nz3c1EqXiAX+ZZU7qlX/dCcemo6It7LQ0DRMi1QsTJRK5ajZJLkVwXXbBOrgNeiwH1xbjabQiljQwhg4PdB6jA8aZa1aKGkFxZ9EYhdBkF9c9J3Xzhhr2saW1libOzdsiOFrTN88hbfoD/0/syakB4qKV0XJ02pkJ4lAhvem1ZD81lki3gD92WMp/aKjS6a5swDGdxfZs9sTy30mchqkZOYok4SXsYOs/zwya3ghOpQdLPqooZ0UkI+j7JGBJAi1N1/NfG1KGkCOpNRtM+Njx3hM4H4ZR5BV4JoPTtkpwwmj9P70rEW1OLg9d0kwBhHBCeAcFapgjc+WYIu9bWsBfpLlPZbjtxKszwHPIkCkv7ICd6xApYdHNkO6+4Zi6x9DAYsC7hdbjt3nx4oaN/GgKizE9ANT1D6+A</p>
+                        </div>
+                        <button class="button middle-blue text-uppercase" type="submit">Decrypt message</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-5 push-lg-7 respond-block">
+                <button class="button yellow text-uppercase" type="submit">respond</button>
+                <div class="user-icon hidden-sm-down"><i class="fa fa-user-circle"></i></div>
+            </div>
+        </div>
+    </div>
+    <!-- /#page-content-wrapper -->
+
+</div>
+<!-- /#wrapper -->
+
+
+<!-- Menu Toggle Script -->
+<script>
+    $("#menu-toggle").click(function (e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+</script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+<script src="https://use.fontawesome.com/778322d9ba.js"></script>
+</body>
+</html>
