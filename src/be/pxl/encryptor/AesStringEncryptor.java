@@ -10,6 +10,7 @@ import java.util.List;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import javax.swing.plaf.synth.SynthScrollBarUI;
 import javax.xml.bind.DatatypeConverter;
 
 public abstract class AesStringEncryptor {
@@ -27,8 +28,7 @@ public abstract class AesStringEncryptor {
 				result[i] = byteArray.get(i).byteValue();
 			}
 			br.close();
-			String key = RSAEncryptor.decrypt(prkey, result);
-			br.close();
+			String key = RSAEncryptor.decryptPrivate(prkey, result);
 			IvParameterSpec iv = new IvParameterSpec(key.substring(16, 32).getBytes("UTF-8"));
 			SecretKeySpec skeySpec = new SecretKeySpec(key.substring(0, 16).getBytes("UTF-8"), "AES");
 			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
@@ -43,12 +43,12 @@ public abstract class AesStringEncryptor {
 		return null;
 	}
 
-	public static String encrypt(String value, String pathToKey, String prkey, String pukey) {
+	public static String encrypt(String value, String pathToKey, String pukey) {
 		try {
 			String key = RandomStringGenerator.getString(32);
 			File keyFile = new File(pathToKey);
 			PrintWriter writer = new PrintWriter(keyFile);
-			byte[] keyEncrypted = RSAEncryptor.encrypt(prkey, pukey, key);
+			byte[] keyEncrypted = RSAEncryptor.encryptPublic(pukey, key);
 			for (byte b : keyEncrypted) {
 				writer.println(b);
 			}

@@ -13,7 +13,7 @@ import javax.imageio.ImageIO;
  * @author Bram Swinnen
  *
  */
-public final class PNG_Encryptor {
+public abstract class PNG_Encryptor {
 
 	/**
 	 * Hoofdmethode om een bericht aan een foto toe te voegen.
@@ -26,12 +26,12 @@ public final class PNG_Encryptor {
 	 *            de locatie en de naam van de output foto
 	 */
 	public static void addMessageToPicture(String pathToPicture, String message, String destination, String keyLocation,
-			String pukey, String prkey) {
+			String pukey2) {
 		BufferedImage picture = loadPicture(pathToPicture);
 		int[] pixels = getPixels(picture);
 		int w = picture.getWidth();
 		int h = picture.getHeight();
-		writeData(pixels, getByteArrayFromString(AesStringEncryptor.encrypt(message, keyLocation, prkey, pukey)));
+		writeData(pixels, getByteArrayFromString(AesStringEncryptor.encrypt(message, keyLocation, pukey2)));
 		writeImg(getImageFromArray(pixels, w, h), destination);
 	}
 

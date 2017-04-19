@@ -15,7 +15,7 @@ import javax.crypto.Cipher;
 
 public abstract class RSAEncryptor {
 
-	private static void generateKey(String prkeypath, String pukeypath) {
+	public static void generateKey(String prkeypath, String pukeypath) {
 		try {
 			final KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
 			keyGen.initialize(1024);
@@ -50,15 +50,20 @@ public abstract class RSAEncryptor {
 
 	}
 
-	private static boolean areKeysPresent(String prkey, String pukey) {
-		return (isKeyPresent(prkey) && isKeyPresent(pukey));
-	}
-
-	private static boolean isKeyPresent(String key) {
-		return new File(key).exists();
-	}
-
 	private static byte[] encrypt(String text, PublicKey key) {
+		byte[] cipherText = null;
+		try {
+			// get an RSA cipher object and print the provider
+			final Cipher cipher = Cipher.getInstance("RSA");
+			// encrypt the plain text using the public key
+			cipher.init(Cipher.ENCRYPT_MODE, key);
+			cipherText = cipher.doFinal(text.getBytes());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return cipherText;
+	}
+	private static byte[] encrypt(String text, PrivateKey key) {
 		byte[] cipherText = null;
 		try {
 			// get an RSA cipher object and print the provider
@@ -88,12 +93,25 @@ public abstract class RSAEncryptor {
 
 		return new String(dectyptedText);
 	}
-
-	public static byte[] encrypt(String prKeyPath, String puKeyPath, String message) {
+	private static String decrypt(byte[] text, PublicKey key) {
+		byte[] dectyptedText = null;
 		try {
-			if (!areKeysPresent(prKeyPath, puKeyPath)) {
-				generateKey(prKeyPath, puKeyPath);
-			}
+			// get an RSA cipher object and print the provider
+			final Cipher cipher = Cipher.getInstance("RSA");
+
+			// decrypt the text using the private key
+			cipher.init(Cipher.DECRYPT_MODE, key);
+			dectyptedText = cipher.doFinal(text);
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		return new String(dectyptedText);
+	}
+
+	public static byte[] encryptPublic(String puKeyPath, String message) {
+		try {
 			ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(puKeyPath));
 			final PublicKey publicKey = (PublicKey) inputStream.readObject();
 			inputStream.close();
@@ -105,15 +123,37 @@ public abstract class RSAEncryptor {
 		return null;
 	}
 
-	public static String decrypt(String prKeyPath, byte[] encrypted) {
+	public static String decryptPrivate(String prKeyPath, byte[] encrypted) {
 		try {
-			if (!isKeyPresent(prKeyPath)) {
-				return null;
-			}
 			ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(prKeyPath));
 			final PrivateKey privateKey = (PrivateKey) inputStream.readObject();
 			inputStream.close();
 			return decrypt(encrypted, privateKey);
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return null;
+
+	}
+	public static byte[] encryptPrivate(String prKeyPath, String message) {
+		try {
+			ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(prKeyPath));
+			final PrivateKey privateKey = (PrivateKey) inputStream.readObject();
+			inputStream.close();
+			final byte[] cipherText = encrypt(message, privateKey);
+			return cipherText;
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static String decryptPublic(String puKeyPath, byte[] encrypted) {
+		try {
+			ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(puKeyPath));
+			final PublicKey publicKey = (PublicKey) inputStream.readObject();
+			inputStream.close();
+			return decrypt(encrypted, publicKey);
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}

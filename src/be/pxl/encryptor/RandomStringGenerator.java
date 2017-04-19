@@ -2,7 +2,7 @@ package be.pxl.encryptor;
 
 import java.util.Random;
 
-public class RandomStringGenerator {
+public abstract class RandomStringGenerator {
 	public static String getString(int lengte) {
 		String uitkomst = "";
 		Random rand = new Random();

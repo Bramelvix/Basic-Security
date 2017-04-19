@@ -6,8 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class LoginChecker {
-	private static class ConnectionFactory {
+public abstract class LoginChecker {
+	private static abstract class ConnectionFactory {
 		private static Connection connection;
 
 		public static Connection getConnection() throws SQLException {
