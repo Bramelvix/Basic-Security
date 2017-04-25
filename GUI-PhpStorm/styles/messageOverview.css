@@ -59,7 +59,7 @@ header{
 }
 
 header #logo{
-    width: 280px;
+    width: 160px;
 }
 
 #menu-toggle span{
@@ -211,6 +211,7 @@ header #logo{
         position: absolute;
         padding: 15px;
         text-align: center;
+        margin-top:110px;
     }
 
     #wrapper.toggled #page-content-wrapper {
@@ -240,5 +241,13 @@ header #logo{
     }
     .message{
         width: 100%;
+    }
+
+    .date .line{
+        width:20%;
+    }
+
+    .date h3{
+        width:40%;
     }
 }
