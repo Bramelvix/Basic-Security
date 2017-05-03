@@ -10,7 +10,7 @@ public abstract class LoginChecker {
 	private static abstract class ConnectionFactory {
 		private static Connection connection;
 
-		public static Connection getConnection() throws SQLException {
+		private static Connection getConnection() throws SQLException {
 			if (connection == null || connection.isClosed())
 				connection = DriverManager.getConnection("jdbc:mysql://213.136.26.180:3306/bramlvx_basicSecurity",
 						"bramlvx_user", "userpass");

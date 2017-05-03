@@ -28,7 +28,7 @@ public abstract class AesStringEncryptor {
 				result[i] = byteArray.get(i).byteValue();
 			}
 			br.close();
-			String key = RSAEncryptor.decryptPrivate(prkey, result);
+			String key = new String(RSAEncryptor.decryptPrivate(prkey, result));
 			IvParameterSpec iv = new IvParameterSpec(key.substring(16, 32).getBytes("UTF-8"));
 			SecretKeySpec skeySpec = new SecretKeySpec(key.substring(0, 16).getBytes("UTF-8"), "AES");
 			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
@@ -48,7 +48,7 @@ public abstract class AesStringEncryptor {
 			String key = RandomStringGenerator.getString(32);
 			File keyFile = new File(pathToKey);
 			PrintWriter writer = new PrintWriter(keyFile);
-			byte[] keyEncrypted = RSAEncryptor.encryptPublic(pukey, key);
+			byte[] keyEncrypted = RSAEncryptor.encryptPublic(pukey, key.getBytes());
 			for (byte b : keyEncrypted) {
 				writer.println(b);
 			}

@@ -16,25 +16,52 @@ public class Test {
 		String pathToPublicKey2 = "./public2.key";
 		String message = "#abcdefghijklmnopqrstuvwxyz#";
 		try {
-			PrintWriter writer = new PrintWriter("./hash.txt");
-			byte[] encryptedMessage = RSAEncryptor.encryptPrivate(pathToPrivateKey2, MD5.getHash(message));
-			for (byte b : encryptedMessage) {
+			PrintWriter writer = new PrintWriter("./file3.txt");
+			byte[] encrypedHashedMessage = RSAEncryptor.encryptPrivate(pathToPrivateKey1, MD5.getHash(message).getBytes());
+			for (byte b : encrypedHashedMessage) {
 				writer.println(b);
 			}
 			writer.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		PNG_Encryptor.addMessageToPicture("./res/pic.png", message, "./res/pic1.png", pathToKey, pathToPublicKey1);
-		String gekregenMessage = PNG_Encryptor.readMessageFromPicture("./res/pic1.png", pathToKey, pathToPrivateKey1);
+		PNG_Encryptor.addMessageToPicture("./res/pic.png", message, "./res/pic1.png", pathToKey, pathToPublicKey2);
+
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(new File("./key.txt")));
+			PrintWriter writer = new PrintWriter("./file2.txt");
+			byte[] AES = new byte[128];
+			for (int i = 0; i < 128; i++) {
+				AES[i] = Byte.valueOf(reader.readLine());
+			}
+			byte[] encryptedAES = RSAEncryptor.encryptPublic(pathToPublicKey2, AES);
+			writer.close();
+			reader.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		String gekregenMessage = PNG_Encryptor.readMessageFromPicture("./res/pic1.png", pathToKey, pathToPrivateKey2);
 		System.out.println(gekregenMessage);
 		String gehashed = MD5.getHash(gekregenMessage);
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader(new File("./hash.txt")));
+			BufferedReader reader = new BufferedReader(new FileReader(new File("./file2.txt")));
 			byte[] uitkomst = new byte[128];
 			for (int i = 0; i < uitkomst.length; i++) {
-				uitkomst[i] = Byte.valueOf(reader.readLine());
+				uitkomst[i] = (Byte.valueOf(reader.readLine()));
 			}
+			reader.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(new File("./file2.txt")));
+			byte[] key = new byte[128];
+			for (int i = 0; i < 128; i++) {
+				key[i] = Byte.valueOf(reader.readLine());
+			}
+			byte[] echtekey = RSAEncryptor.decryptPrivate(pathToPrivateKey2, key);
+			reader.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

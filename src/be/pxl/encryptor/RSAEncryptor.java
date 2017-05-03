@@ -50,34 +50,34 @@ public abstract class RSAEncryptor {
 
 	}
 
-	private static byte[] encrypt(String text, PublicKey key) {
+	private static byte[] encrypt(byte[] text, PublicKey key) {
 		byte[] cipherText = null;
 		try {
 			// get an RSA cipher object and print the provider
 			final Cipher cipher = Cipher.getInstance("RSA");
 			// encrypt the plain text using the public key
 			cipher.init(Cipher.ENCRYPT_MODE, key);
-			cipherText = cipher.doFinal(text.getBytes());
+			cipherText = cipher.doFinal(text);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return cipherText;
 	}
-	private static byte[] encrypt(String text, PrivateKey key) {
+	private static byte[] encrypt(byte[] text, PrivateKey key) {
 		byte[] cipherText = null;
 		try {
 			// get an RSA cipher object and print the provider
 			final Cipher cipher = Cipher.getInstance("RSA");
 			// encrypt the plain text using the public key
 			cipher.init(Cipher.ENCRYPT_MODE, key);
-			cipherText = cipher.doFinal(text.getBytes());
+			cipherText = cipher.doFinal(text);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return cipherText;
 	}
 
-	private static String decrypt(byte[] text, PrivateKey key) {
+	private static byte[] decrypt(byte[] text, PrivateKey key) {
 		byte[] dectyptedText = null;
 		try {
 			// get an RSA cipher object and print the provider
@@ -91,9 +91,9 @@ public abstract class RSAEncryptor {
 			ex.printStackTrace();
 		}
 
-		return new String(dectyptedText);
+		return dectyptedText;
 	}
-	private static String decrypt(byte[] text, PublicKey key) {
+	private static byte[] decrypt(byte[] text, PublicKey key) {
 		byte[] dectyptedText = null;
 		try {
 			// get an RSA cipher object and print the provider
@@ -107,10 +107,10 @@ public abstract class RSAEncryptor {
 			ex.printStackTrace();
 		}
 
-		return new String(dectyptedText);
+		return dectyptedText;
 	}
 
-	public static byte[] encryptPublic(String puKeyPath, String message) {
+	public static byte[] encryptPublic(String puKeyPath, byte[] message) {
 		try {
 			ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(puKeyPath));
 			final PublicKey publicKey = (PublicKey) inputStream.readObject();
@@ -123,7 +123,7 @@ public abstract class RSAEncryptor {
 		return null;
 	}
 
-	public static String decryptPrivate(String prKeyPath, byte[] encrypted) {
+	public static byte[] decryptPrivate(String prKeyPath, byte[] encrypted) {
 		try {
 			ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(prKeyPath));
 			final PrivateKey privateKey = (PrivateKey) inputStream.readObject();
@@ -135,7 +135,7 @@ public abstract class RSAEncryptor {
 		return null;
 
 	}
-	public static byte[] encryptPrivate(String prKeyPath, String message) {
+	public static byte[] encryptPrivate(String prKeyPath, byte[] message) {
 		try {
 			ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(prKeyPath));
 			final PrivateKey privateKey = (PrivateKey) inputStream.readObject();
@@ -148,7 +148,7 @@ public abstract class RSAEncryptor {
 		return null;
 	}
 
-	public static String decryptPublic(String puKeyPath, byte[] encrypted) {
+	public static byte[] decryptPublic(String puKeyPath, byte[] encrypted) {
 		try {
 			ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(puKeyPath));
 			final PublicKey publicKey = (PublicKey) inputStream.readObject();
