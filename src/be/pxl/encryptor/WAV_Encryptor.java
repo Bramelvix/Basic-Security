@@ -10,20 +10,26 @@ import java.nio.file.Paths;
 
 import javax.sound.sampled.*;
 
-public final class WAV_Encryptor {
+/**
+ * Deze klasse encrypteert text in muziek (.WAV) bestanden en kan ook tekst uit
+ * muziek lezen.
+ * 
+ * @author Branco Dortangs
+ *
+ */
+public abstract class WAV_Encryptor {
 	private static final int START_INDEX = 3700000;
 
 	private static int END_INDEX;
 
 	public static void encryptWAV(String input_path, String message, String output_path) {
 		byte[] data = convertWAVFileToByteArray(input_path);
-		calcEnd_index(message);
+		calculateEnd_index(message);
 		setHiddenMessageOnStartIndexTo(data, message);
 		createWAVFile(data, output_path);
-
 	}
 
-	private static void calcEnd_index(String message) {
+	private static void calculateEnd_index(String message) {
 		END_INDEX = START_INDEX + message.length();
 	}
 
@@ -39,6 +45,7 @@ public final class WAV_Encryptor {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private static void printMessageFromOutputWAVFile(String outputPath) {
 		byte[] outputData = convertWAVFileToByteArray(outputPath);
 		printByteValues(outputData, "OUTPUT-BYTES");

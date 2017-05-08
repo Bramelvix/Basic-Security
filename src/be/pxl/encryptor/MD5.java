@@ -11,10 +11,8 @@ public abstract class MD5 {
 			m.update(input.getBytes(), 0, input.length());
 			return new BigInteger(1, m.digest()).toString(16);
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
 	}
-
 }
