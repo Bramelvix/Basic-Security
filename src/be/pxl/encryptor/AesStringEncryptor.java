@@ -10,10 +10,9 @@ import java.util.List;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import javax.swing.plaf.synth.SynthScrollBarUI;
 import javax.xml.bind.DatatypeConverter;
 
-public abstract class AesStringEncryptor {
+public abstract class AESStringEncryptor {
 	public static String decrypt(String encrypted, String pathToKey, String prkey) {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(new File(pathToKey)));
@@ -39,7 +38,6 @@ public abstract class AesStringEncryptor {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-
 		return null;
 	}
 
@@ -62,7 +60,6 @@ public abstract class AesStringEncryptor {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-
 		return null;
 	}
 

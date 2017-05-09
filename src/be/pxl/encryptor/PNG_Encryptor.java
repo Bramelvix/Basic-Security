@@ -31,7 +31,7 @@ public abstract class PNG_Encryptor {
 		int[] pixels = getPixels(picture);
 		int w = picture.getWidth();
 		int h = picture.getHeight();
-		writeData(pixels, getByteArrayFromString(AesStringEncryptor.encrypt(message, keyLocation, pukey2)));
+		writeData(pixels, getByteArrayFromString(AESStringEncryptor.encrypt(message, keyLocation, pukey2)));
 		writeImg(getImageFromArray(pixels, w, h), destination);
 	}
 
@@ -273,7 +273,7 @@ public abstract class PNG_Encryptor {
 	 * @return
 	 */
 	public static String readMessageFromPicture(String pathToPicture, String pathToKey, String prkey) {
-		return AesStringEncryptor.decrypt(
+		return AESStringEncryptor.decrypt(
 				getStringFromByteArray((getBytesFromPixels(getPixels(loadPicture(pathToPicture))))), pathToKey, prkey);
 	}
 
