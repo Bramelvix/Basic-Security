@@ -1,4 +1,4 @@
-package be.pxl.encryptor;
+package be.pxl.crypto;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -11,18 +11,18 @@ import java.nio.file.Paths;
 import javax.sound.sampled.*;
 
 /**
- * Deze klasse encrypteert text in muziek (.WAV) bestanden en kan ook tekst uit
+ * Deze klasse verstopt text in muziek (.WAV) bestanden en kan ook tekst uit
  * muziek lezen.
  * 
  * @author Branco Dortangs
  *
  */
-public abstract class WAV_Encryptor {
+public abstract class WAV_Hider {
 	private static final int START_INDEX = 3700000;
 
 	private static int END_INDEX;
 
-	public static void encryptWAV(String input_path, String message, String output_path) {
+	public static void hideMessage(String input_path, String message, String output_path) {
 		byte[] data = convertWAVFileToByteArray(input_path);
 		calculateEnd_index(message);
 		setHiddenMessageOnStartIndexTo(data, message);
@@ -33,7 +33,7 @@ public abstract class WAV_Encryptor {
 		END_INDEX = START_INDEX + message.length();
 	}
 
-	public static void printMessage(String path) {
+	public static void showMessage(String path) {
 		printByteValuesAsString(convertWAVFileToByteArray(path));
 	}
 

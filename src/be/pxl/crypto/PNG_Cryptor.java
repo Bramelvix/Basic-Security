@@ -1,4 +1,4 @@
-package be.pxl.encryptor;
+package be.pxl.crypto;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -13,7 +13,7 @@ import javax.imageio.ImageIO;
  * @author Bram Swinnen
  *
  */
-public abstract class PNG_Encryptor {
+public abstract class PNG_Cryptor {
 
 	/**
 	 * Hoofdmethode om een bericht aan een foto toe te voegen.
@@ -23,15 +23,17 @@ public abstract class PNG_Encryptor {
 	 * @param message
 	 *            bericht om in de foto te encrypteren
 	 * @param destination
-	 *            de locatie en de naam van de output foto
+	 *            de locatie van de output foto
+	 * @param keyLocation
+	 *            de locatie van de key
 	 */
 	public static void addMessageToPicture(String pathToPicture, String message, String destination, String keyLocation,
-			String pukey2) {
+			String pathToPublicKey2) {
 		BufferedImage picture = loadPicture(pathToPicture);
 		int[] pixels = getPixels(picture);
 		int w = picture.getWidth();
 		int h = picture.getHeight();
-		writeData(pixels, getByteArrayFromString(AESStringEncryptor.encrypt(message, keyLocation, pukey2)));
+		writeData(pixels, getByteArrayFromString(AES_Cryptor.encrypt(message, keyLocation, pathToPublicKey2)));
 		writeImg(getImageFromArray(pixels, w, h), destination);
 	}
 
@@ -273,8 +275,8 @@ public abstract class PNG_Encryptor {
 	 * @return
 	 */
 	public static String readMessageFromPicture(String pathToPicture, String pathToKey, String prkey) {
-		return AESStringEncryptor.decrypt(
-				getStringFromByteArray((getBytesFromPixels(getPixels(loadPicture(pathToPicture))))), pathToKey, prkey);
+		return AES_Cryptor.decrypt(getStringFromByteArray((getBytesFromPixels(getPixels(loadPicture(pathToPicture))))),
+				pathToKey, prkey);
 	}
 
 	/**
@@ -352,8 +354,6 @@ public abstract class PNG_Encryptor {
 		}
 	}
 
-	private PNG_Encryptor() {
-		// afblijven
+	private PNG_Cryptor() {
 	}
-
 }

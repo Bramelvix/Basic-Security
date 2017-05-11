@@ -1,10 +1,13 @@
-package be.pxl.encryptor;
+package be.pxl.unused;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import be.pxl.crypto.MD5;
+import be.pxl.crypto.RandomStringGenerator;
 
 public abstract class LoginChecker {
 	private static abstract class ConnectionFactory {
@@ -23,7 +26,6 @@ public abstract class LoginChecker {
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement
 						.executeQuery("SELECT Salt FROM Users WHERE Username ='" + username + "';")) {
-
 			if (resultSet.next()) {
 				String salt = resultSet.getString(1);
 				String hash = MD5.getHash(pass + salt);
@@ -39,14 +41,13 @@ public abstract class LoginChecker {
 			e.printStackTrace();
 		}
 		return false;
-
 	}
 
 	public static void createUser(String username, String pass) {
 		try {
 			Connection connection = ConnectionFactory.getConnection();
 			Statement statement = connection.createStatement();
-			String salt = RandomStringGenerator.getString(30);
+			String salt = RandomStringGenerator.generateRandomString(30);
 			String hash = MD5.getHash(pass + salt);
 			statement.executeUpdate("INSERT INTO Users(Username,Password,Salt) VALUES('" + username + "','" + hash
 					+ "','" + salt + "');");
@@ -54,7 +55,6 @@ public abstract class LoginChecker {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 }
