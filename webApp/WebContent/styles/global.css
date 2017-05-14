@@ -1,0 +1,66 @@
+/* GLOBAL
+===========================
+*/
+@import url('https://fonts.googleapis.com/css?family=Poiret+One|Roboto');
+
+.dark-blue {
+    background-color: #2a363b;
+}
+
+.middle-blue {
+    background-color: #3e5057;
+}
+
+.lighter-blue {
+    background-color: #607b87;
+}
+
+.light-gray {
+    background-color: #e4e4e4;
+}
+
+.yellow {
+    background-color: #ebca01;
+}
+
+html, body{
+    margin:0;
+    padding:0;
+    height:100%;
+}
+html{
+    font-size:10px;
+    line-height:1.42;
+}
+
+body{
+    font-size: 1.8rem;
+    font-family: 'Poiret One', sans-serif;
+}
+
+.button {
+    border: none;
+    width: 100%;
+    border-radius: 8px;
+    display: block;
+    margin: 5% 0;
+    padding: 2%;
+}
+
+.button:hover,
+.button:focus,
+.button:active{
+    /*padding: 2.5%;*/
+    font-size: 2rem;
+    color: white;
+    transition:all 420ms ease-in-out 0s;
+}
+
+a,
+a:active,
+a:hover,
+a:focus,
+a:visited{
+    text-decoration: none;
+}
+
