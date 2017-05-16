@@ -6,22 +6,31 @@ import java.io.FileReader;
 
 public abstract class Decryptor {
 
-	public static String decrypt(String pathToOutputPicture) {
+	public static String decrypt(String pathToOutputPicture) throws Exception {
 		return getMessage(pathToOutputPicture);
 	}
 
-	private static String getMessage(String pathToOutputPicture) {
-		return PNG_Cryptor.readMessageFromPicture(pathToOutputPicture, PathProvider.getPathToFile2(),
-				PathProvider.getPathToPrivateKey2());
+	private static String getMessage(String pathToOutput) throws Exception {
+		if (pathToOutput.endsWith(".png")) {
+			return PNG_Cryptor.readMessageFromPicture(pathToOutput, PathProvider.getPathToFile2(),
+					PathProvider.getPathToPrivateKey2());
+		} else {
+			if (pathToOutput.endsWith(".wav")) {
+				return WAV_Encryptor.showMessage(pathToOutput, PathProvider.getPathToFile2(),
+						PathProvider.getPathToPrivateKey2());
+			} else {
+				throw new Exception("Invalid file type!");
+			}
+		}
 	}
 
-	public static boolean checkIfHashIsCorrect(String pathToOutputPicture) {
+	public static boolean checkIfHashIsCorrect(String pathToOutputPicture) throws Exception {
 		String inputHash = leesDecrypteerEnPrintHash(PathProvider.getPathToFile3(), PathProvider.getPathToPublicKey1());
 		String outputHash = MD5.getHash(getMessage(pathToOutputPicture));
 		return inputHash.equals(outputHash);
 	}
 
-	public static void writeOutputMessage(String pathToOutputPicture) {
+	public static void writeOutputMessage(String pathToOutputPicture) throws Exception {
 		String receivedMessage = getMessage(pathToOutputPicture);
 		System.out.println(receivedMessage);
 		System.out.println("Valid HASH? : " + checkIfHashIsCorrect(pathToOutputPicture));
