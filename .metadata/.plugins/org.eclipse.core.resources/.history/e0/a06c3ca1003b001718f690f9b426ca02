@@ -1,0 +1,244 @@
+/* SIDEBAR
+===========================
+ */
+ @import url('https://fonts.googleapis.com/css?family=Poiret+One|Roboto');
+ 
+
+body {
+    overflow-x: hidden;
+}
+
+/* Toggle Styles */
+
+#wrapper {
+    padding-left: 0;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+#wrapper.toggled {
+    padding-left: 260px;
+}
+
+#sidebar-wrapper {
+    z-index: 1000;
+    position: fixed;
+    left: 120px;
+    width: 0;
+    height: 100%;
+    margin-left: -90px;
+    overflow-y: auto;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+    width: 260px;
+}
+
+#page-content-wrapper {
+    padding: 50px 20px 20px 20px;
+    position: relative;
+    color: white;
+}
+
+#wrapper.toggled #page-content-wrapper {
+    position: relative;
+    margin-right: 0;
+}
+
+/* header */
+
+header{
+    position: fixed;
+    top: 20px;
+    left: 50px;
+    z-index: 2000;
+}
+
+
+
+#menu-toggle span{
+    display: block;
+    width: 35px;
+    height: 5px;
+    background-color: white;
+    margin: 6px 0;
+}
+
+/* Sidebar Styles */
+
+.sidebar-nav {
+    position: absolute;
+    top: 120px;
+    width: 260px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sidebar-nav li {
+    text-indent: 10px;
+}
+
+.sidebar-nav li a {
+    display: block;
+    text-decoration: none;
+    color: white;
+    text-transform: uppercase;
+}
+
+.sidebar-nav li a:hover,
+.sidebar-nav li a:active,
+.sidebar-nav li a:focus,
+.active{
+    text-decoration: none;
+    background:  #3e5057;
+    border-left: #ebca01 solid 0.5rem;
+}
+
+.sidebar-nav li a img{
+    width: 30%;
+    padding: 10px;
+}
+
+#logo{
+    width: 30%;
+    margin-bottom: 40px;
+}
+
+/* INHOUD PAGINA
+===========================
+ */
+ .container-fluid{
+ 	text-align: center
+ }
+ 
+#message-container{
+    background: #e4e4e4;
+    padding: 4%;
+}
+
+#message-container h1{
+    color: black;
+    text-align: center;
+    font-size: 50px;
+    margin-bottom: 40px;
+}
+
+#photo{
+    border:none;
+     
+    width: 30%;
+    float: left;
+    margin-right: 2%;
+    height: 80%;
+    overflow: hidden;
+   
+}
+
+#showImage{
+	width: 100%;
+}
+
+#message{
+    width: 65%;
+    float: left;
+}
+
+#message .button{
+    padding: 1% 2%;
+    margin: 0;
+}
+
+form{
+	color: black;
+}
+
+form label{
+	font-family: "Roboto", sans-serif;
+	text-transform: uppercase;
+	font-size: 14px;
+	font-weight: bold;
+	float: left;
+	padding-right: 20px;
+	vertical-align: middle;
+	line-height: 50px;
+	margin: 0;
+}
+
+#outputName{
+	float: left;
+	padding: 1%;
+	display: inline-block;
+	width: 35%;
+}
+
+#messageInput{
+	padding: 1%;
+	display: block;
+    width:100%;
+}
+
+form fieldset{
+	margin-bottom: 2%;
+}
+
+#imagePicker{
+	float: left;
+	display: inline-block;
+	background: white;
+	padding: 1%;
+	border: 1px solid #bbb;
+	width: 55%;
+}
+
+#decrypted{
+	margin-top: 20px;
+	color: black;
+	background-color: white;
+	padding: 1% 2%;;
+}
+
+#decrypted>h3{
+	text-transform: uppercase;
+	font-family: "Roboto", sans-serif;
+	color: gray;
+}
+
+#decrypted p{
+	font-size: 20px;
+}
+/* MOBILE
+===========================
+ */
+
+@media(max-width:768px) {
+    #page-content-wrapper {
+        width: 100%;
+        position: absolute;
+        padding: 15px;
+        text-align: center;
+    }
+
+    #wrapper.toggled #page-content-wrapper {
+        position: absolute;
+        margin-right: -90px;
+    }
+
+    header{
+        width: 100%;
+        background-color: #2a363b;
+        left: 0;
+        top: 0;
+        padding: 20px;
+    }
+
+    #sidebar-wrapper{
+        left: 90px;
+    }
+}

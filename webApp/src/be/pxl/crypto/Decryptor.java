@@ -10,9 +10,18 @@ public abstract class Decryptor {
 		return getMessage(pathToOutputPicture);
 	}
 
-	private static String getMessage(String pathToOutputPicture) {
-		return PNG_Cryptor.readMessageFromPicture(pathToOutputPicture, PathProvider.getPathToFile2(),
-				PathProvider.getPathToPrivateKey2());
+	private static String getMessage(String pathToOutput) {
+		if (pathToOutput.endsWith(".png")) {
+			return PNG_Cryptor.readMessageFromPicture(pathToOutput, PathProvider.getPathToFile2(),
+					PathProvider.getPathToPrivateKey2());
+		} else {
+			if (pathToOutput.endsWith(".wav")) {
+				return WAV_Encryptor.showMessage(pathToOutput, PathProvider.getPathToFile2(),
+						PathProvider.getPathToPrivateKey2());
+
+			}
+			return null;
+		}
 	}
 
 	public static boolean checkIfHashIsCorrect(String pathToOutputPicture) {

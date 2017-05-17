@@ -34,7 +34,7 @@ public class DecryptServlet extends HttpServlet {
 			request.setAttribute("hash", "Warning: the hash of the received message did not match the hash of the sent message! The message might be corrupted.");
 			request.setAttribute("message", message);
 		} else{
-			request.setAttribute("hash", "The hash of the received message matches the hash of the sent message. You can be sure the file has not been changed in the process!");
+			request.setAttribute("hash", "The hash of the received message matches the hash of the sent message. You can be sure the message has not been edited!");
 			request.setAttribute("message", message);
 		}
 		

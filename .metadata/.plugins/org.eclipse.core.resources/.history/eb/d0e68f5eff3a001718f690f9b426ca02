@@ -1,0 +1,150 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crypto</title>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+	integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ"
+	crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+	integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+	crossorigin="anonymous"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
+	integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+	crossorigin="anonymous"></script>
+<script src="https://use.fontawesome.com/778322d9ba.js"></script>
+<!-- Own style -->
+<link rel="stylesheet" type="text/css" href="styles/global.css">
+<link rel="stylesheet" type="text/css" href="styles/crypto.css">
+</head>
+
+<body class="middle-blue">
+
+	<header> <a href="#menu-toggle"
+		class="btn btn-default hidden-md-up" id="menu-toggle"> <span></span>
+		<span></span> <span></span>
+	</a> </header>
+
+	<div id="wrapper" class="toggled">
+		<!-- Sidebar -->
+		<div id="sidebar-wrapper" class="dark-blue">
+			<ul class="sidebar-nav">
+				<li><a href="#" class="active"><img src="images/lock.svg"
+						alt="Encrypt message" title="Encrypt message" /> Encrypt message
+				</a></li>
+				<li><a href="decrypt.jsp"><img src="images/key.svg"
+						alt="Messages" title="Decrypt messages" /> Decrypt message</a></li>
+			</ul>
+		</div>
+		<!-- /#sidebar-wrapper -->
+		<!-- Page Content -->
+		<div id="page-content-wrapper">
+			<div class="container-fluid">
+				<img id="logo" src="images/LogoWit.svg" alt="Crypto logo" />
+				<div class="row">
+					<div class="col-lg-10 push-lg-1 clearfix" id="message-container">
+						<h1>Encrypt message</h1>
+						<div id="photo">
+							<img src="" id="showImage">
+						</div>
+						<div id="message">
+							<form action="encryptServlet" method="post" name="form">
+								<fieldset>
+									<label for="imagePicker">The file (.png of .wav) to hide the
+										message in: </label> <input type="file" name="inputPicture"
+										id="imagePicker" accept="image/png, audio/wav"
+										onchange="showPicture(event)" required>
+								</fieldset>
+								<fieldset>
+									<label for="outputName">The name of the future output
+										picture (with encrypted message):</label> <input type="text"
+										name="outputPicture" placeholder="Filename" id="outputName"
+										class="input-field" required>
+								</fieldset>
+								<fieldset>
+									<textarea name="message" id="messageInput" rows="5"
+										placeholder="Type your message here ..." class="input-field"
+										required></textarea>
+								</fieldset>
+
+								<button class="button yellow text-uppercase" type="submit">Encrypt</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /#page-content-wrapper -->
+
+		</div>
+		<!-- /#wrapper -->
+
+		<!-- Menu Toggle Script -->
+		<script>
+			$("#menu-toggle").click(function(e) {
+				e.preventDefault();
+				$("#wrapper").toggleClass("toggled");
+			});
+
+			$("#imagePicker")
+					.change(
+							function() {
+								var pathToInputPicture = this.value;
+								if (pathToInputPicture) {
+									var startIndex = (pathToInputPicture
+											.indexOf('\\') >= 0 ? pathToInputPicture
+											.lastIndexOf('\\')
+											: pathToInputPicture
+													.lastIndexOf('/'));
+									var filename = pathToInputPicture
+											.substring(startIndex);
+									if (filename.indexOf('\\') === 0
+											|| filename.indexOf('/') === 0) {
+										filename = filename.substring(1);
+									}
+									var extensionIndex = filename.indexOf('.');
+									var extension = filename.substring(
+											extensionIndex).toLowerCase();
+									if (extension != ".png" && extension != ".wav") {
+										alert(extension
+												+ " is not a valid file type! Choose a .png or .wav file");
+										document.getElementById("imagePicker").value = "";
+									}									
+									var input = document.getElementById("imagePicker");
+									var fReader = new FileReader();
+									fReader.readAsDataURL(input.files[0]);
+									fReader.onloadend = function(event){
+									}
+								}
+							});
+			
+			var showPicture = function(event) {
+				var image = document.getElementById('showImage');
+				var photo = URL.createObjectURL(event.target.files[0]);
+				var filename = event.target.files[0].name;
+				var extensionIndex = filename.indexOf('.');
+				var extension = filename.substring(
+						extensionIndex).toLowerCase();
+				if(extension == ".png"){
+					image.src = photo;
+					image.onload = function() {
+						var div = document.getElementById('photo');
+						div.style.height = image.height + "px";
+					}
+				} else{
+					image.src = "images/music.svg";
+					image.height = "60px",
+					image.onload = function() {
+						var div = document.getElementById('photo');
+						div.style.height = "60px";
+				}
+				
+			};
+		</script>
+</body>
+</html>

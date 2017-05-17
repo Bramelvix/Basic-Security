@@ -6,11 +6,18 @@ import java.io.PrintWriter;
 
 public abstract class Encryptor {
 
-	public static void encrypt(String message, String pathToInputPicture, String pathToOutputPicture) {
+	public static void encrypt(String message, String pathToInput, String pathToOutput) {
 		RSA_Cryptor.generateKeyPair(PathProvider.getPathToPrivateKey1(), PathProvider.getPathToPublicKey1());
 		RSA_Cryptor.generateKeyPair(PathProvider.getPathToPrivateKey2(), PathProvider.getPathToPublicKey2());
-		PNG_Cryptor.addMessageToPicture(pathToInputPicture, message, pathToOutputPicture, PathProvider.getPathToFile2(),
-				PathProvider.getPathToPublicKey2());
+		if (pathToInput.endsWith(".png")) {
+			PNG_Cryptor.addMessageToPicture(pathToInput, message, pathToOutput, PathProvider.getPathToFile2(),
+					PathProvider.getPathToPublicKey2());
+		} else {
+			if (pathToInput.endsWith(".wav")) {
+				WAV_Encryptor.hideMessage(pathToInput, message, pathToOutput, PathProvider.getPathToFile2(),
+						PathProvider.getPathToPublicKey2());
+			}
+		}
 		saveHash_IntoFile3(message);
 	}
 
